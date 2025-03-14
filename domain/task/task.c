@@ -1,12 +1,5 @@
 #include "task.h"
 
-typedef struct task {
-    char title[255];
-    time_t create_date;
-    time_t task_date;
-    char summary[500];
-} task;
-
 struct task * build_task(char title[255], char summary[500]) {
     printf(" build task\n");
     printf("title = %s\n", title);
@@ -18,9 +11,10 @@ struct task * build_task(char title[255], char summary[500]) {
     return t;
 }
 
+/*
 task create_task() {
     // TODO
-}
+}*/
 
 void printTask(task * t) {
     printf(" build printTask\n");
