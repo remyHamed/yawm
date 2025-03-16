@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 #include<string.h>
+#include "./../inputer/inputer.h"
 #ifndef TASK_H
 #define TASK_H
 typedef struct task {
@@ -12,5 +13,7 @@ typedef struct task {
 } task;
 
 struct task * build_task(char title[255], char summary[500]);
-void printTask(task * t);
+task * create_task();
+void save_task(task * t);
+void print_task(task * t);
 #endif
