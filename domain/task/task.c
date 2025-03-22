@@ -2,8 +2,8 @@
 
 struct task * build_task(char title[255], char summary[500]) {
     printf(" build task\n");
-    printf("title = %s\n", title);
-    printf("summary = %s\n", summary);
+    printf("title = |%s|\n", title);
+    printf("summary = |%s|\n", summary);
     task * t = malloc(sizeof(task));
     strcpy(t->title, title);
     strcpy(t->summary, summary);
@@ -23,13 +23,21 @@ task * create_task() {
     return t;
 }
 
-void save_task(task * t) {
-    print_task(t);
+
+void save_task(const char *filename, task* t) {
+    FILE *file = fopen(filename, "a");
+    if (file == NULL) {
+        perror("Erreur lors de l'ouverture du fichier");
+        return;
+    }
+
+    fprintf(file, "%s, %ld, %ld, %s\n", t->title, t->create_date, t->task_date, t->summary);
+    fclose(file);
 }
 
 void print_task(task * t) {
     printf(" build printTask\n");
-    printf("task : \n");
+    printf("TASK\n");
     printf("title : %s\n", t->title);
     printf("create_date : %d\n", t->create_date);
     printf("task_date : %d\n", t->task_date);

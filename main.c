@@ -20,7 +20,7 @@ int main (int argc, char ** argv) {
         case '1':
             clear_screen();
             t = create_task();
-            save_task(t);
+            save_task("../save/backup.txt", t);
             free(t);
             break;
         case '2':

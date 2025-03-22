@@ -14,6 +14,6 @@ typedef struct task {
 
 struct task * build_task(char title[255], char summary[500]);
 task * create_task();
-void save_task(task * t);
+void save_task(const char *filename, task* t);
 void print_task(task * t);
 #endif
