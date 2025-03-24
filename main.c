@@ -9,7 +9,6 @@ int main (int argc, char ** argv) {
     char c = '1';
     task * t = NULL;
 
-
     while (status != '3')
     {
         display_menu();
@@ -24,7 +23,7 @@ int main (int argc, char ** argv) {
             free(t);
             break;
         case '2':
-            /* code */
+            read_task_from_save("../save/backup.txt");
             break;
         default:
             clear_screen();

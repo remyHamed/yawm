@@ -1,4 +1,5 @@
 #include "task.h"
+#include <time.h>
 
 struct task * build_task(char title[255], char summary[500]) {
     printf(" build task\n");
@@ -43,4 +44,26 @@ void print_task(task * t) {
     printf("task_date : %d\n", t->task_date);
     printf("title : %s\n", t->summary);
     printf(" build printTask finished\n");
+}
+
+void read_task_from_save(const char *filename) {
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        perror("Erreur lors de l'ouverture du fichier");
+        return;
+    }
+
+    char *line = NULL;
+    size_t len = 0;
+    ssize_t read;
+
+    printf("Contenu du fichier '%s':\n", filename);
+    printf("----------------------------------\n");
+
+    while ((read = getline(&line, &len, file)) != -1) {
+        printf("%s", line); 
+    }
+
+    free(line);
+    fclose(file);
 }
