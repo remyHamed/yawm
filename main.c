@@ -8,9 +8,13 @@ int main (int argc, char ** argv) {
     char status = '1';
     char c = '1';
     task * t = NULL;
+    task** t_array = NULL;
 
-    while (status != '3')
-    {
+    t_array = mapper_from_save_file("../save/backup.txt");
+
+    print_task_array(t_array);
+
+    /*while (status != '3') {
         display_menu();
         c = getchar();
         while (getchar() != '\n');
@@ -31,7 +35,9 @@ int main (int argc, char ** argv) {
             break;
         }
         status = c;
-    }
+    }*/
+    
+    free_task_array(t_array);
     
     return 0;
 }

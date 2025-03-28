@@ -24,7 +24,6 @@ task * create_task() {
     return t;
 }
 
-
 void save_task(const char *filename, task* t) {
     FILE *file = fopen(filename, "a");
     if (file == NULL) {
@@ -66,4 +65,127 @@ void read_task_from_save(const char *filename) {
 
     free(line);
     fclose(file);
+}
+
+task ** mapper_from_save_file(const char *filename) {
+   
+    if (!filename) return NULL;
+
+    FILE * file = fopen(filename, "r");
+    if (!file) {
+        perror("Erreur lors de l'ouverture du fichier");
+        return NULL;
+    }
+
+    task * head = NULL;
+    task * tail = NULL;
+    char * line = NULL;
+    size_t len = 0;
+    ssize_t read;
+
+    while ((read = getline(&line, &len, file)) != -1) {
+        if (line[read-1] == '\n') line[read-1] = '\0';
+        
+        task* new_task = parse_line_to_task(line);
+        if (!new_task) continue;
+
+        if (!head) {
+            head = new_task;
+            tail = new_task;
+        } else {
+            tail->next = new_task;
+            tail = new_task;
+        }
+    }
+
+    free(line);
+    fclose(file);
+    
+    int count = 0;
+    task * current = head;
+    while (current) {
+        count++;
+        current = current->next;
+    }
+
+    task ** result = malloc((count+1) * sizeof(task*));
+    if (!result) {
+        while (head) {
+            task* tmp = head;
+            head = head->next;
+            free(tmp);
+        }
+        return NULL;
+    }
+
+    current = head;
+    for (int i = 0; i < count; i++) {
+        result[i] = current;
+        current = current->next;
+    }
+    result[count] = NULL;
+
+    return result;
+}
+
+void free_task_array(task** tasks) {
+    if (!tasks) return;
+    
+    for (int i = 0; tasks[i] != NULL; i++) {
+        free(tasks[i]);
+    }
+    free(tasks);
+}
+
+task * parse_line_to_task(const char* line) {
+    if (!line) return NULL;
+
+    char* tokens[4];
+    char* copy = strdup(line);
+    if (!copy) return NULL;
+
+    char* token = strtok(copy, ",");
+    int i = 0;
+    while (token && i < 4) {
+        while (*token == ' ') token++;
+        int len = strlen(token);
+        while (len > 0 && token[len-1] == ' ') token[--len] = '\0';
+        
+        tokens[i++] = token;
+        token = strtok(NULL, ",");
+    }
+
+    if (i != 4) {
+        free(copy);
+        return NULL;
+    }
+
+    task* new_task = malloc(sizeof(task));
+    if (!new_task) {
+        free(copy);
+        return NULL;
+    }
+
+    strncpy(new_task->title, tokens[0], sizeof(new_task->title)-1);
+    new_task->create_date = atol(tokens[1]);
+    new_task->task_date = atol(tokens[2]);
+    strncpy(new_task->summary, tokens[3], sizeof(new_task->summary)-1);
+    new_task->next = NULL;
+
+    free(copy);
+    return new_task;
+}
+
+void print_task_array(task** tasks) {
+
+    if (!tasks) return;
+
+    int size = sizeof(tasks) / sizeof(tasks[0]);
+
+    printf("size : %d\n", size);
+
+    for (size_t i = 0; i < size; i++) {
+        print_task(tasks[i]);
+    }
+    
 }
